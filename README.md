@@ -15,19 +15,21 @@ After training, the learned policy was transferred to the Tello drone for real-w
 - The environment consists of two main elements: a detected point (agent) and a target point (center area), representing the position to be aligned.
 
 ### 2. TD3 Agent
-- TD3 (Twin Delayed Deep Deterministic Policy Gradient) addresses some of the limitations of DDPG.
+- **TD3** (Twin Delayed Deep Deterministic Policy Gradient) addresses some of the limitations of **DDPG**.
   
-  - Twin: TD3 architecture employs two critic networks, and the smaller Q-value is used during training to mitigate overestimation.
+  - **Twin**: TD3 architecture employs two critic networks, and the smaller Q-value is used during training to mitigate overestimation.
 
-  - Dlayed:The actor network is updated less frequently than the critics, which helps stabilize learning.
+  - **Dlayed**:The actor network is updated less frequently than the critics, which helps stabilize learning.
  
 ### 3. Real Drone Deployment (Tello SDK)
 - The Tello drone is controlled by python library **DJITelloPy**.
 - The Action output from the trained policy ([x, y]).
-  - Action **x** was converted the lateral action in Gym environment to yaw velocity on the Tello.
-  - Action **y** was converted the vertical action in Gym environent to z-axis velocity on the Tello.
-- In this study, OpenCV ArUco markers were used for target detection.
-However, as long as the target can be detected in the captured image and represented as a point coordinate, the tracking system can work with other detection methods, such as YOLO.
+  - Action **x** was converted the **lateral** action in Gym environment to **yaw** velocity on the Tello.
+  - Action **y** was converted the **vertical** action in Gym environent to **z-axis** velocity on the Tello.
+
+- In this study, **OpenCV ArUco markers** were used for target detection.
+
+  However, as long as the target can be detected in the captured image and represented as a point coordinate, the tracking system can work with other detection methods, such as **YOLO**.
 
 ## Demonstration
 ### The trained agent in Gymnasium environment
