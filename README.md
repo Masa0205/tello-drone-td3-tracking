@@ -21,7 +21,7 @@ After training, the learned policy was transferred to the Tello drone for real-w
 
   - Dlayed:The actor network is updated less frequently than the critics, which helps stabilize learning.
  
-## 3. Real Drone Deployment (Tello SDK)
+### 3. Real Drone Deployment (Tello SDK)
 - The Tello drone is controlled by python library **DJITelloPy**.
 - The Action output from the trained policy ([x, y]).
   - Action **x** was converted the lateral action in Gym environment to yaw velocity on the Tello.
