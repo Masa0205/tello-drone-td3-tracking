@@ -1,6 +1,22 @@
 # tello-drone-td3-tracking
 This project demonstrates autonomous visual tracking using a **Tello** drone controlled by reiforcement learnig algorithm (**TD3**).
 
+## File Structure
+```
+tello-drone-td3-tracking/
+├─ gym_main.py # train program (gym_env)
+├─ real_play.py # simulate real_env
+├─ TD3.py # agent define (TD3)
+├─ aruco.py # detect marker (arUco by openCV)
+├─ dronecam.gif # gif file
+├─ train.gif # gif file
+├─ README.md # ducumentation
+└─ original_gym/ # custom gym environment 
+├─ gym_env.py # environment define
+├─ init.py 
+└─ pycache/ 
+```
+
 ## Overview
 A custom **gymnasium** environment was designed to simulate the control process. The Tello vision was simply reproduced in gymnasium environment (960 × 720). 
 
