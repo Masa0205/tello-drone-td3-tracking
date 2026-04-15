@@ -4,13 +4,19 @@ import torch
 from collections import deque
 import copy
 class arUco:
-    def __init__(self, dictionary=cv2.aruco.DICT_4X4_50):
+    def __init__(self, dict=cv2.aruco.DICT_4X4_50):
         """
         ArUcoマーカー検出クラス
         :param dictionary: 使用するマーカー辞書 (例: cv2.aruco.DICT_4X4_50)
         """
-        self.dictionary = cv2.aruco.getPredefinedDictionary(dictionary)
+        self.dictionary = cv2.aruco.getPredefinedDictionary(dict)
+
+        # 2. パラメータを初期化する
         self.parameters = cv2.aruco.DetectorParameters()
+
+        # 3. ArucoDetectorオブジェクトを作成する
+        self.detector = cv2.aruco.ArucoDetector(self.dictionary, self.parameters)
+
 
     def detect(self, image, draw=True):
         """
@@ -34,9 +40,7 @@ class arUco:
         
 
         # マーカー検出
-        corners, ids, rejected = cv2.aruco.detectMarkers(
-            gray, self.dictionary, parameters=self.parameters
-        )
+        corners, ids, rejected = self.detector.detectMarkers(gray)
         area = None
         centers = []
         output_img = image.copy()

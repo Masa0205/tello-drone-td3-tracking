@@ -28,8 +28,7 @@ def image_thread(image_queue):
                 image_queue.get()
             # 最新の画像をキューに追加
             image_queue.put(output_img)
-            #print("success")
-
+            #prin("success")
             #状態取得
             norm_a = np.array([0.0, 0.0], dtype=np.float32)
             #print("area=",area)
@@ -52,6 +51,7 @@ def image_thread(image_queue):
             print(f"yaw={yaw}, z={z}")
             me.send_rc_control(0, 0, z, yaw)
             # 取得間隔を調整（例: 0.03秒 = 約33fps）
+            
             time.sleep(1/30)
         except Exception as e:
             print("Error:", e)
