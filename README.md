@@ -1,6 +1,6 @@
 # tello-drone-td3-tracking 
 This project demonstrates autonomous visual tracking using a **Tello** drone controlled by reiforcement learnig algorithm (**TD3**).
-Python version **3.8.2**
+Python version **3.8.20**
 
 ## File Structure
 ```
