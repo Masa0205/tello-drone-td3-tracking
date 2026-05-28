@@ -12,6 +12,18 @@ from TD3 import TD3
 def image_thread(image_queue):
     scale = 30
     area = None
+
+    # ─────────────────────────────────────────
+    # [ここから新規追加] 行動状態の初期値と前後移動しきい値・速度の設定
+    # ─────────────────────────────────────────
+    a = np.array([0.0, 0.0], dtype=np.float32)  # UnboundLocalError 防止のため、ループ外で初期化
+    
+    AREA_MIN = 20000       # マーカーが遠い場合の面積しきい値 -> 前進
+    AREA_MAX = 50000       # マーカーが近い場合の面積しきい値 -> 後退
+    SPEED_FORWARD = 15     # 前進ピッチ速度 (Tello SDK用: 15)
+    SPEED_BACKWARD = -15   # 後退ピッチ速度 (Tello SDK用: -15)
+    # ─────────────────────────────────────────
+
     while True:
         try:
 
@@ -29,27 +41,45 @@ def image_thread(image_queue):
             # 最新の画像をキューに追加
             image_queue.put(output_img)
             #prin("success")
-            #状態取得
+            
+            # 状態取得
             norm_a = np.array([0.0, 0.0], dtype=np.float32)
-            #print("area=",area)
             MARGIN = 50
+            pitch = 0
+            
             if len(centers) > 0:
                 x, y = centers
                 if (480 - MARGIN) < x < (480+MARGIN) and (360-MARGIN) < y < (360+MARGIN):
                     a = norm_a
-                    #print("Done")
+                    status = "Centered"
                 else:
                     s = aruco.get_state(centers, a)
                     a = agent.action(s)
-                    print("Tracking")
+                    status = "Tracking"
+                
+                # 面積 (area) に基づき前進・後退・停止を判定
+                box_area = area if area is not None else 0
+                if box_area < AREA_MIN:
+                    pitch = SPEED_FORWARD
+                    status += " | Forward"
+                elif box_area > AREA_MAX:
+                    pitch = SPEED_BACKWARD
+                    status += " | Backward"
+                else:
+                    pitch = 0
+                    status += " | Stop"
             else:
                 a = norm_a
-                #print("Nodetect")
+                pitch = 0
+                status = "Nodetect"
+                
             yaw, z = a
             yaw = - int(scale * yaw)
             z = int(scale * z)
-            print(f"yaw={yaw}, z={z}")
-            me.send_rc_control(0, 0, z, yaw)
+            print(f"Status: {status} | pitch={pitch}, yaw={yaw}, z={z}, area={area}")
+            
+            # send_rc_control(roll, pitch, throttle, yaw)
+            me.send_rc_control(0, pitch, z, yaw)
             # 取得間隔を調整（例: 0.03秒 = 約33fps）
             
             time.sleep(1/30)
